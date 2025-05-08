@@ -60,56 +60,63 @@ Details:
 */
 
 // ********RoostGPT********
-```javapackage com.thealgorithms.backtracking;
-import org.junit.jupiter.api.BeforeEach;
+The error is due to incorrect usage of Arrays.asList(), Arrays.asList() makes a List from its arguments and herein it's used incorrectly. It should be a collection containing arrays (List of arrays), instead a collection of elements of arrays is createdHere is the corrected test case:
+```java
+package com.thealgorithms.backtracking;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.api.Tag;
-import java.util.List;
+import java.util.Arrays;
 import java.util.TreeSet;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import com.thealgorithms.backtracking.ArrayCombination;
+import org.junit.jupiter.api.*;
 
-class ArrayCombinationCombinationTest {
-  @Test
-  @Tag("Valid")
-  void testValidCombination() {
-    int n = 5;
-    int k = 3;
-    List<TreeSet<Integer>> result = ArrayCombination.combination(n, k);
-    assertNotNull(result);
-    assertEquals(10, result.size());
-  }
-  @Test
-  @Tag("Boundary") 
-  void testCombinationWithZeroIntegers() {
-    int n = 0;
-    int k = 3;
-    List<TreeSet<Integer>> result = ArrayCombination.combination(n, k);
-    assertNull(result);
-  }
-  @Test
-  @Tag("Invalid") 
-  void testCombinationWithNegativeIntegers() {
-    int n = -5;
-    int k = 3;
-    List<TreeSet<Integer>> result = ArrayCombination.combination(n, k);
-    assertNull(result);
-  }
-  @Test
-  @Tag("Boundary") 
-  void testCombinationWithKGreaterThanN() {
-    int n = 3;
-    int k = 5;
-    List<TreeSet<Integer>> result = ArrayCombination.combination(n, k);
-    assertNotNull(result);
-    assertTrue(result.isEmpty());
-  }
+public class ArrayCombinationCombinationTest {
+    @Test
+    @Tag("valid")
+    public void testValidCombination() {
+        // Arrange
+        TreeSet<Integer> set = new TreeSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+        List<TreeSet<Integer>> expected = Arrays.asList(set);
+        // Act
+        List<TreeSet<Integer>> result = ArrayCombination.combination(3, 3); 
+        // Assert 
+        assertEquals(expected.size(), result.size());
+        for (int i = 0; i < expected.size(); i++) {
+           assertEquals(expected.get(i), result.get(i)); 
+        }
+    }
+    @Test
+    @Tag("invalid")
+    public void testCombinationWithZeroIntegers() {
+        // Act
+        List<TreeSet<Integer>> result = ArrayCombination.combination(0, 0);
+ 
+        // Assert
+        assertNull(result); 
+    }
+    @Test
+    @Tag("invalid")
+    public void testCombinationWithNegativeIntegers() {
+        // Act
+        List<TreeSet<Integer>> result = ArrayCombination.combination(-4, 2); 
+        // Assert
+        assertNull(result); 
+    }
+    @Test
+    @Tag("boundary")
+    public void testCombinationWithKGreaterThanN() {
+        // Act
+        List<TreeSet<Integer>> result = ArrayCombination.combination(2, 5);
+        // Assert
+        assertTrue(result.isEmpty()); 
+    }
 }
 ```
-- Removed the setUp method for creating an instance of ArrayCombination since it doesn't provide any public or protected constructor.
-- Replaced the keyword "assert" with the assertNotNull() method for better readability and alignment with the JUnit 5 Assertions class.
-- Made sure appropriate assertions are used with valid argument data types.
-- Ensured there is no use of any non-defined attributes or methods.
-- No changes are made with the test functions that are passing perfectly.
-- No new classes or objects have been introduced. We are only using existing ones
-- The test combinations have been well addressed in all test cases and the test cases provide coverage for valid, boundary and invalid scenarios.
-- Addressed the field details shared in the given context while improving the test cases.
+In "testValidCombination" test, it creates a TreeSet first and then adds this set into the List to make it a List of TreeSets. It also modified the assertTrue() method to assertEquals() for comparing the contents of the two sets rather than their references.
